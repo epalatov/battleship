@@ -1,0 +1,91 @@
+body {
+	width: 100%;
+	margin: 0;
+	padding-top: 40px;
+	text-align: center;
+}
+
+* { box-sizing: border-box; }
+
+.container {
+	display: flex;
+	justify-content: space-around;
+	margin: 70px auto;
+	width: 900px;
+}
+
+.battlefield-1, .battlefield-2 {
+	position: relative;
+	display: inline-block;
+	border-spacing: 0; 
+	border-collapse: collapse;
+}
+
+.battlefield-cell {
+	position: relative;
+	padding: 0;
+	width: 40px;
+	height: 40px;
+	border: 1px solid #adbed2;
+}
+
+.marker {
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-family: Arial;
+	color: #2d3744;
+	font-size: 12px;
+}
+
+.marker__col {
+	width: 40px;
+	text-align: center;
+	margin-top: -20px;
+}
+
+.marker__row {
+	width: 13px;
+	margin-top: 12px;
+	margin-left: -23px;
+	text-align: right;
+}
+
+.battlefield-cell:hover {
+	cursor: pointer;
+	background-color: #eaeff5;
+}
+
+.ship {
+	width: inherit;
+	height: inherit;
+	background-color: #c5d3dd;
+}
+
+#new_ship {
+	padding: 15px 25px;
+	font-size: 14px;
+	background-color: #3f5cdb;
+	color: #fff;
+	border: 0;
+	border-radius: 3px;
+}
+
+#new_ship:hover {
+	background-color: #4563e5;
+	cursor: pointer;
+
+}
+
+#new_ship:focus {
+	outline: none;
+}
+.title {
+	padding: 0;
+	font-family: tahoma;
+	color: #2c2c2c;
+	font-size: 24px;
+}
+
+
+
