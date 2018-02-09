@@ -16,8 +16,9 @@
 				//запрашиваем у игрока данные о корабле который хотим поставить
 				var data = inputData();
 
-				//создаем корабль на основе данных
-				createShips(data[0], data[1], '1', '|', "player1");
+				//создаем корабли на основе данных
+				createShips(data[0], data[1], '1', '|');
+
 
 				function inputData(){
 						regCol = /[абвгдежзик]/i;
@@ -88,9 +89,9 @@
 					
 
 					//закрашиваем клетки на поле
-					for(rowNumber in currentDesk){
+					for(rowNumber in player1_desk_my){
 
-						var row = currentDesk[rowNumber];
+						var row = player1_desk_my[rowNumber];
 						
 						for(columnNumber in row) {
 							var column = row[columnNumber]

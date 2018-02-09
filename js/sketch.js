@@ -112,8 +112,5 @@ function PlayStart() {
 		// если промах (var first = false) ставим точку на своем curMarkDesc в координатaх x и y
 		// если попадание ставим крестик на curMarkDesc в координатaх x и y 
 		currentPlayer.markShot(x, y)
+	}
 }
-
-
-
-

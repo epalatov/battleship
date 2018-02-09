@@ -11,7 +11,7 @@ var ships2x = 3;
 var ships3x = 2;
 var ships4x = 1;
 var shipType;
-var currentDesk;
+var playDesk;
 
 // создаем две игровых доски (матрицы)
 var player1_desk_my = matrixArray(10, 10);
@@ -31,9 +31,9 @@ function matrixArray(rows, columns){
 }
 
 // функция создания кораблей
-function createShips (col, row, type, orientation, whodesk) {
+function createShips (col, row, type, orientation) {
   if(shipsCount != 0) {
-   // записываем в массив координаты корабля в зависимости от ориентации
+   // записываем в массив coordinates координаты клеток корабля в зависимости от ориентации
     var coordinates = [];
     if (orientation == "|") {
       for(var i = 0; i < type; i++) {
@@ -46,68 +46,128 @@ function createShips (col, row, type, orientation, whodesk) {
         col = col + 1;
       }
     }
-    // размещаем корабль в матрице
-    var currentDesk = placeShip(coordinates, type, whodesk);
-    return currentDesk;
+    // размещаем корабль в массиве матрицы
+    placeShip(coordinates, type);
   } else {
     alert("Вы использовали все свои корабли");
   }
 }
 
-// функция размещения кораблей 
-function placeShip(coordinates, type, whoDesk){
+// функция размещения корабля в массиве матрицы
+function placeShip(coordinates, type){
   
-  if(checkShipsCount(type)) {
-    //оределяем на чьей доске размещать корабли
-    switch(whoDesk) {
-      case "player1": currentDesk = player1_desk_my; break
-      case "player2": currentDesk = player2_desk_enemy; break
+  var check = checkRulePlacement(coordinates, type);
+  if(check) {
+    return player1_desk_my;
+  }
+}
+
+
+
+// функция проверки правил расположения кораблей
+function checkRulePlacement(coordinates, type) {
+
+  //высчитываем координаты корабля в массиве матрицы
+  for(var dot in coordinates) {  
+
+    var coordinate = coordinates[dot];
+    var row = coordinate[0]-1;
+    var col = coordinate[1]-1;
+    var placesAround = [];
+
+    //координаты проверочных полей вокруг однопалубных кораблей внутри поля
+    var check1x = [[row-1, col], [row-1, col-1], [row, col-1], [row+1, col-1], [row+1, col], [row+1, col+1], [row, col+1], [row-1, col+1]];
+
+    //координаты проверочных полей вокруг угловых однопалубных кораблей
+    var check1xLeftTop = [[row, col+1], [row+1, col], [row+1, col+1]];
+    var check1xRightTop = [[row, col-1], [row+1, col], [row+1, col-1]];
+    var check1xLeftBottom = [[row, col+1], [row-1, col], [row-1, col+1]];
+    var check1xRightBottom = [[row, col-1], [row-1, col], [row-1, col-1]];
+
+    //координаты проверочных полей вокруг однопалубных кораблей на 1 строке
+    var check1xTop = [[row, col-1], [row+1, col-1], [row+1, col], [row+1, col+1], [row, col+1]];
+
+    //координаты проверочных полей вокруг однопалубных кораблей на 10 строке
+    var check1xBottom = [[row, col-1], [row-1, col-1], [row-1, col], [row-1, col+1], [row, col+1]];
+
+    //координаты проверочных полей вокруг однопалубных кораблей в первой колонке (А)
+    var check1Left = [[row-1, col], [row-1, col+1], [row, col+1], [row+1, col+1], [row+1, col]];
+
+    //координаты проверочных полей вокруг однопалубных кораблей в последней колонке (К)
+    var check1Right = [[row-1, col], [row-1, col-1], [row, col-1], [row+1, col-1], [row+1, col]];
+    
+
+    //в зависимости от кораблей и их положения делаем проверку
+    
+    /* ------- однопалубные ------------*/
+
+    if(type === "1" && row === 0 && (col === 0)){
+      //Углы
+      checkRuleFor(check1xLeftTop);
+    } else if (type === "1" && row === 0 && (col === 9)){
+      checkRuleFor(check1xRightTop);
+    } else if (type === "1" && row === 9 && (col === 9)){
+      checkRuleFor(check1xRightBottom);
+    } else if (type === "1" && row === 9 && (col === 0)){
+      checkRuleFor(check1xLeftBottom);
+    } else if (type === "1" && row === 0 && (col > 0 && col < 9)){
+      //Стороны
+      checkRuleFor(check1xTop);
+    } else if (type === "1" && row === 9 && (col > 0 && col < 9)){
+      checkRuleFor(check1xBottom);
+    } else if (type === "1" && (col === 0)){
+      checkRuleFor(check1Left);
+    } else if (type === "1" && (col === 9)){
+      checkRuleFor(check1Right);
+    } else if (type === "1" && (row > 0 && row < 9) && (col > 0 && col < 9)){
+      //Внутри поля 
+      checkRuleFor(check1x);
+    } 
+
+    /* ------- двухпалубные ------------*/
+  }
+
+
+  function checkRuleFor(rule) {
+
+    //проверяем текущее местоположение корабля 
+    if(player1_desk_my[row][col] === ship){
+      alert("Нельзя ставить корабли друг на друга!Задайте другие координаты.")
+      return false;
     }
 
-    //высчитываем координаты корабля в матрице
-    for(var dot in coordinates) {  
-      var coordinate = coordinates[dot];
-      var row = coordinate[0]-1;
-      var col = coordinate[1]-1;
-      var placesAround = [];
-      //высчитываем координаты полей вокруг однопалубного корабля
-      var check1x = [[row-1, col], [row+1, col], [row, col-1], [row, col+1], [row-1, col-1], [row-1, col+1], [row+1, col-1], [row+1, col+1]];
-      
-      //если корабль однопалубный
-      if(type === "1" && ships1x !== 0){
-        //проверяем первую клетку
-        if(currentDesk[row][col] === ship){
-          alert("Нельзя ставить корабли друг на друга!\nЗадайте другие координаты.")
-          return currentDesk;
-        }
-        //проверям клетки вокруг корабля, записывая результат в массив placesAround
-        for(var checkFree in check1x) {
-          var checkPlace = check1x[checkFree];
-          var checkX = checkPlace[0];
-          var checkY = checkPlace[1];
+    //проверям клетки вокруг корабля, записывая результат в массив placesAround
+    for(var checkFree in rule) {
+      var checkPlace = rule[checkFree];
+      var checkX = checkPlace[0];
+      var checkY = checkPlace[1];
 
-          if((checkX < 0 || checkY < 0) || (checkX >= 10 || checkY >= 10)){
-            placesAround.push(true);
-          } else if(currentDesk[checkX][checkY] === free) {
-            placesAround.push(true);
-          } else {
-            placesAround.push(false);
-          }
-        }
-        //проверям правило касания перебирая массив placesAround
-        for(var i = 0; i < placesAround.length; i++){
-          if(placesAround[i] === false){
-            alert("ПРАВИЛО\nПри размещении корабли не могут косаться друг друга сторонами и углами.\nЗадайте другие координаты."); 
-            return currentDesk;
-          }
-        }
+      if(player1_desk_my[checkX][checkY] === free) {
+        placesAround.push(true);
+      } else {
+        placesAround.push(false);
       }
     }
 
-    currentDesk[row][col] = ship;
-    return currentDesk;
+    //проверям правило касания перебирая массив placesAround
+    for(var i = 0; i < placesAround.length; i++){
+      if(placesAround[i] === false){
+        alert("ОШИБКА!\nПри размещении корабли не могут косаться друг друга сторонами и углами. Задайте другие координаты."); 
+        return false;
+      } 
+    }
+    //считаем количество оставшихся кораблей
+    var hasSheeps = checkShipsCount(type);
+    if(hasSheeps) {
+      //ставим кораблю в матрицу
+      player1_desk_my[row][col] = ship;
+    } else {
+      return false;
+    }
   }
 }
+
+
 
 // функция проверки количества кораблей
 function checkShipsCount(shipType) {
