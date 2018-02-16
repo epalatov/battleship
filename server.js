@@ -1,6 +1,9 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require("socket.io")(http);
+var port = process.env.PORT || 6000;
+
+app.set('port', (process.env.PORT || 6000));
 
 app.get("/", function (request, response) {
     response.sendFile(__dirname + "/index.html");
@@ -29,39 +32,13 @@ io.on('connection', function (socket) {
     //io.emit("message", "User " + user + " connected");
 });
 
-http.listen(3000, function () {
-    console.log('Started server');
+app.listen(app.get('port'), function () {
+    console.log('Node app is running on port', app.get('port'));
 });
 
+// http.createServer(onRequest).listen(process.env.PORT || 5000)
 
 
-//передаем данные на сервер
-// let message = {
-//     player1: "hello"
-// }
-// if (socket.readyState === WebSocket.OPEN) {
-//     socket.send(JSON.stringify(message));
-// }
-
-// //открытие сокет-соединения
-// socket.onopen = function (event) {
-//     status.innerHTML = "Соединение установлено!";
-// }
-// //Закрытие сокет-соединения
-// socket.onclose = function (event) {
-//     if (event.wasClean) {
-//         status.innerHTML = "Соединение успешно закрыто!";
-//     } else {
-//         status.innerHTML = "Ошибка соединения! Внезапное закрытие.";
-//     };
-//     status.innerHTML += "<br>код: " + event.code + "причина " + event.reason;
-// }
-// //получение данных
-// socket.onmessage = function (event) {
-//     let message = JSON.parse(event.data);
-//     status.innerHTML = "Пришли данные: " + message.player1;
-// }
-// //возникновение ошибки
-// socket.onerror = function (event) {
-//     status.innerHTML = "Ошибка:" + event.error;
-// }
+// http.listen(port, function () {
+//     console.log('Started server');
+// });
