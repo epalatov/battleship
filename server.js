@@ -1,9 +1,9 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require("socket.io")(http);
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 5000;
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', (process.env.PORT || 5000));
 
 app.get("/", function (request, response) {
     response.sendFile(__dirname + "/index.html");
@@ -36,7 +36,7 @@ app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
 });
 
-http.createServer(onRequest).listen(process.env.PORT || 3000)
+http.createServer(onRequest).listen(process.env.PORT || 5000)
 
 
 // http.listen(port, function () {
