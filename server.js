@@ -1,11 +1,7 @@
 var app = require('express')();
-//var http = require('http').Server(app);
-// var io = require("socket.io")(http);
-var server = app.listen(3000);
-var io = require('socket.io').listen(server);
+var http = require('http').Server(app);
+var io = require("socket.io")(http);
 var port = process.env.PORT || 3000;
-
-
 
 app.get("/", function (request, response) {
     response.sendFile(__dirname + "/index.html");
@@ -35,10 +31,10 @@ io.on('connection', function (socket) {
 });
 
 
-// http.listen(port, function () {
-//     console.log('Started server');
-// });
-
-app.listen(port, "0.0.0.0", function () {
-    console.log("Listening on Port 3000");
+http.listen(port, function () {
+    console.log('Started server');
 });
+
+// app.listen(port, "0.0.0.0", function () {
+//     console.log("Listening on Port 5000");
+// });
